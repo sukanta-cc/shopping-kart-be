@@ -1,7 +1,24 @@
 const express = require("express");
 const services = require("./services");
+const verifyToken = require("../middlewares/verifyToken");
+const adminRouter = require("../middlewares/adminRoute");
 
 const router = express.Router();
+
+router.use(verifyToken);
+
+/**
+ * @route - GET /api/coupons
+ * @description - This api is used to get activated Coupons
+ */
+router.get("/", (req, res) => {
+	services
+		.getActivatedCoupons(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+router.use(adminRouter);
 
 /**
  * @route - POST /api/coupons
@@ -21,6 +38,17 @@ router.post("/", (req, res) => {
 router.put("/", (req, res) => {
 	services
 		.changeCouponStatus(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+/**
+ * @route - GET /api/coupons
+ * @description - This api is used to get all Coupons
+ */
+router.get("/", (req, res) => {
+	services
+		.getAllCoupons(req)
 		.then((result) => res.status(200).json(result))
 		.catch((err) => res.status(err.status ?? 500).json(err));
 });

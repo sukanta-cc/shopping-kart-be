@@ -120,4 +120,37 @@ module.exports = {
 			}
 		});
 	},
+
+	getActivatedCoupons: (req) => {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const coupons = await couponModel.find({
+					isDeleted: false,
+					status: true,
+				});
+
+				if (!coupons) {
+					return reject({
+						status: 400,
+						success: false,
+						message: messages.coupon.COUPONS_FETCHED_FAILED,
+					});
+				} else {
+					return resolve({
+						status: 200,
+						success: true,
+						message: messages.coupon.COUPONS_FETCHED_SUCCESS,
+						result: coupons,
+					});
+				}
+			} catch (error) {
+				console.error(error, "<<-- Error in create coupon");
+				return reject({
+					success: false,
+					message: messages.common.INTERNAL_SERVER_ERROR,
+					err: error.message ?? error.toString(),
+				});
+			}
+		});
+	},
 };
