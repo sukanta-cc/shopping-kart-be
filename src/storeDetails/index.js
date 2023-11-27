@@ -26,7 +26,18 @@ router.use(adminRouter);
  */
 router.post("/logo", upload.single("logo"), (req, res) => {
 	services
-		.store(req)
+		.logoUpload(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+/**
+ * @route - POST /api/store/banner
+ * @description - Api to upload a store logo
+ */
+router.post("/banner", upload.single("banner"), (req, res) => {
+	services
+		.bannerUpload(req)
 		.then((result) => res.status(200).json(result))
 		.catch((err) => res.status(err.status ?? 500).json(err));
 });
