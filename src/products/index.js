@@ -34,14 +34,15 @@ router.get("/:productId", (req, res) => {
  * @description - Getting featured products
  */
 router.get("/featured", (req, res) => {
-    services
-      .getFeaturedProducts()
-      .then((result) => res.status(200).json(result))
-      .catch((err) => res.status(err.status?? 500).json(err));
-})
+	services
+		.getFeaturedProducts()
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Below this route will be admin routes
-
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 router.use(adminRouter);
 
 /**
@@ -86,10 +87,10 @@ router.patch("/:productId", (req, res) => {
  * @body - productIds
  */
 router.delete("/", (req, res) => {
-    services
-        .deleteProducts(req)
-        .then((result) => res.status(200).json(result))
-        .catch((err) => res.status(err.status?? 500).json(err));
+	services
+		.deleteProducts(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 module.exports = router;

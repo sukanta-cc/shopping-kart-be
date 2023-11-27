@@ -1,4 +1,4 @@
-const productsModel = require("./model");
+const productsModel = require("./models/model");
 const discountModel = require("../discount/model");
 const messages = require("../utils/messages");
 

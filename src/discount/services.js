@@ -1,6 +1,6 @@
 const messages = require("../utils/messages");
 const discountModel = require("./model");
-const productModel = require("../products/model");
+const productModel = require("../products/models/model");
 
 module.exports = {
 	addDiscount: (req) => {
