@@ -5,13 +5,12 @@ module.exports = {
 	createCoupon: (req) => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const { code, type, value, expiration_date } = req.body;
+				const { code, type, value } = req.body;
 
 				const coupon = new couponModel({
 					code,
 					type,
 					value,
-					expiration_date,
 				});
 
 				const savedCoupon = await coupon.save();
@@ -146,6 +145,41 @@ module.exports = {
 			} catch (error) {
 				console.error(error, "<<-- Error in create coupon");
 				return reject({
+					success: false,
+					message: messages.common.INTERNAL_SERVER_ERROR,
+					err: error.message ?? error.toString(),
+				});
+			}
+		});
+	},
+
+	getCouponByCode: (req) => {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const coupon = await couponModel.findOne({
+					isDeleted: false,
+					status: true,
+					code: req.params.code,
+				});
+
+				if (!coupon) {
+					return reject({
+						status: 400,
+						success: false,
+						message: messages.coupon.COUPON_NOT_FOUND,
+					});
+				} else {
+					return resolve({
+						status: 200,
+						success: true,
+						message: messages.coupon.COUPON_FOUND,
+						result: coupon,
+					});
+				}
+			} catch (error) {
+				console.error(error, "<<-- Error in get coupon code by code");
+				return reject({
+					status: 500,
 					success: false,
 					message: messages.common.INTERNAL_SERVER_ERROR,
 					err: error.message ?? error.toString(),

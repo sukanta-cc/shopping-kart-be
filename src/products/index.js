@@ -3,6 +3,12 @@ const verifyToken = require("../middlewares/verifyToken");
 const adminRouter = require("../middlewares/adminRoute");
 const services = require("./services");
 const upload = require("../utils/upload");
+const { check } = require("express-validator");
+const {
+	cartValidationRule,
+	orderValidationRule,
+	orderStatusValidationRule,
+} = require("./validation");
 
 const router = express.Router();
 
@@ -41,20 +47,72 @@ router.get("/featured", (req, res) => {
 		.catch((err) => res.status(err.status ?? 500).json(err));
 });
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Starting of cart routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 /**
  * @route - POST /api/products/carts
  * @description - This route will be use for adding products to cart
  */
-router.post("/carts", (req, res) => {
+router.post("/carts", cartValidationRule, (req, res) => {
 	services
 		.addToCart(req)
 		.then((result) => res.status(200).json(result))
 		.catch((err) => res.status(err.status ?? 500).json(err));
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Below these routes will be admin routes
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/**
+ * @route - GET /api/products/carts
+ * @description - This route will be use for getting cart values
+ */
+router.get("/carts", (req, res) => {
+	services
+		.getCarts(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Ending of cart routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Starting of order routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/**
+ * @route - GET /api/products/orders
+ * @description - This route will create a new order
+ */
+router.post("/orders", orderValidationRule, (req, res) => {
+	services
+		.createOrder(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+/**
+ * @route - GET /api/products/orders/:orderId
+ * @description - This route will use to update order status
+ * @param {string} - orderId
+ */
+router.patch("/orders/:orderId", orderStatusValidationRule, (req, res) => {
+	services
+		.orderStatusUpdate(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+/**
+ * @route - GET /api/products/orders
+ * @description - This route will be used to get user orders
+ */
+router.get("/orders", (req, res) => {
+	services
+		.getOrders(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Starting of order routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Starting of admin routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 router.use(adminRouter);
 
 /**
@@ -104,5 +162,40 @@ router.delete("/", (req, res) => {
 		.then((result) => res.status(200).json(result))
 		.catch((err) => res.status(err.status ?? 500).json(err));
 });
+
+/**
+ * @route - GET /api/products/orders
+ * @description - This route will be used to get all orders
+ */
+router.get("/orders", (req, res) => {
+	services
+		.getAllOrders(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+/**
+ * @route - GET /api/products/orders/:orderId
+ * @description - This route will return order details
+ */
+router.get("/orders/:orderId", (req, res)=>{
+	services
+        .getOrderDetails(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status?? 500).json(err));
+})
+
+/**
+ * @route - PUT /api/products/cancel-order
+ * @description - this route will be use to cancel order
+ */
+router.put("/cancel-order", (req, res) => {
+	services
+		.cancelOrder(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Ending of admin routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 module.exports = router;

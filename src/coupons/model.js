@@ -18,10 +18,6 @@ const couponSchema = new Schema(
 			type: Number,
 			required: true,
 		},
-		expiration_date: {
-			type: Date,
-			required: true,
-		},
 		status: {
 			type: Boolean,
 			default: true,

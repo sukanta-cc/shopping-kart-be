@@ -18,6 +18,17 @@ router.get("/", (req, res) => {
 		.catch((err) => res.status(err.status ?? 500).json(err));
 });
 
+/**
+ * @route - GET /api/coupons/:code
+ * @description - This api is used to get activated Coupon by coupon code
+ */
+router.get("/:code", (req, res) => {
+	services
+		.getCouponByCode(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
 router.use(adminRouter);
 
 /**
