@@ -1,5 +1,6 @@
 const productsModel = require("./models/model");
 const discountModel = require("../discount/model");
+const cartModel = require("./models/cartModel");
 const messages = require("../utils/messages");
 
 module.exports = {
@@ -9,12 +10,17 @@ module.exports = {
 				const { name, description, productCode, featured, amount } =
 					req.body;
 
+				const imageUrls = await Promise.all(
+					req.files.map((item) => item.path)
+				);
+
 				const globalDiscount = await discountModel.findOne({
 					global: true,
 					status: true,
 				});
 
 				const newProduct = new productsModel({
+					images: imageUrls,
 					name,
 					description,
 					productCode,
@@ -223,6 +229,32 @@ module.exports = {
 			} catch (error) {
 				console.error(error, "<<-- Error in delete products");
 				return reject({
+					success: false,
+					message: messages.common.INTERNAL_SERVER_ERROR,
+					err: error.message ?? error.toString(),
+				});
+			}
+		});
+	},
+
+	addToCart: (req) => {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const { product, quantity } = req.body;
+				const cart = await cartModel.findOne({
+					product,
+				});
+
+				return resolve({
+					status: 200,
+					success: true,
+					message: messages.products.PRODUCT_ADDED_TO_CART,
+					result: product,
+				});
+			} catch (error) {
+				console.error(error, "<<-- Error in adding item to cart");
+				return reject({
+					status: 500,
 					success: false,
 					message: messages.common.INTERNAL_SERVER_ERROR,
 					err: error.message ?? error.toString(),

@@ -2,6 +2,7 @@ const express = require("express");
 const verifyToken = require("../middlewares/verifyToken");
 const adminRouter = require("../middlewares/adminRoute");
 const services = require("./services");
+const upload = require("../utils/upload");
 
 const router = express.Router();
 
@@ -40,9 +41,20 @@ router.get("/featured", (req, res) => {
 		.catch((err) => res.status(err.status ?? 500).json(err));
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Below this route will be admin routes
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/**
+ * @route - POST /api/products/carts
+ * @description - This route will be use for adding products to cart
+ */
+router.post("/carts", (req, res) => {
+	services
+		.addToCart(req)
+		.then((result) => res.status(200).json(result))
+		.catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Below these routes will be admin routes
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 router.use(adminRouter);
 
 /**
@@ -50,7 +62,7 @@ router.use(adminRouter);
  * @description - This route will be use to add product
  * @body - name, description, productCode, featured
  */
-router.post("/", (req, res) => {
+router.post("/", upload.array("images", 8), (req, res) => {
 	services
 		.addProduct(req)
 		.then((result) => res.status(200).json(result))

@@ -14,11 +14,11 @@ const cartSchema = new Schema(
 			ref: "products",
 			required: true,
 		},
-		totalAmount: {
+		quantity: {
 			type: Number,
 			required: true,
 		},
-		quantity: {
+		totalAmount: {
 			type: Number,
 			required: true,
 		},

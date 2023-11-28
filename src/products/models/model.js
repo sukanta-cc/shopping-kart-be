@@ -4,6 +4,11 @@ const Schema = mongoose.Schema;
 
 const productSchema = new Schema(
 	{
+		images: [
+			{
+				type: String,
+			},
+		],
 		name: {
 			type: String,
 			required: true,

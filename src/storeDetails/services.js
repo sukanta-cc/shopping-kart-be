@@ -55,9 +55,8 @@ module.exports = {
 	getImage: (req, res) => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const store = await storeModel.findOne({});
-
-				const img = fs.readFileSync(store.storeLogo);
+				const { imageUrl } = req.query;
+				const img = fs.readFileSync(imageUrl);
 
 				res.end(img, "binary");
 			} catch (error) {
