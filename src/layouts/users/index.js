@@ -6,15 +6,27 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import userTableData from "./data/usersTableData";
 import DataTable from "examples/Tables/DataTable";
-import { Card, Grid } from "@mui/material";
+import {
+	Card,
+	FormControl,
+	Grid,
+	InputLabel,
+	MenuItem,
+	Select,
+} from "@mui/material";
 import MDTypography from "components/MDTypography";
 import "./styles/index.css";
 function Users() {
+	const [status, setStatus] = useState("all");
 	const [search, setSearch] = useState("");
-	const { columns, rows } = userTableData({ search });
+	const { columns, rows } = userTableData({ search, status });
 
 	const handleSearch = async (e) => {
 		setSearch(e.target.value);
+	};
+
+	const handleStatusChange = (e) => {
+		setStatus(e.target.value);
 	};
 
 	return (
@@ -42,13 +54,46 @@ function Users() {
 									<MDTypography variant='h6' color='white'>
 										Users' Table
 									</MDTypography>
-									<MDBox pr={1}>
+									<MDBox
+										pr={1}
+										style={{
+											display: "flex",
+											justifyContent: "space-between",
+											alignItems: "center",
+										}}>
+										<MDBox pr={1}>
+											<FormControl fullWidth>
+												{/* <InputLabel id='demo-simple-select-label'>
+													Status
+												</InputLabel> */}
+												<Select
+													className='user-filter'
+													placeholder='Enter your age'
+													labelId='demo-simple-select-label'
+													id='demo-simple-select'
+													value={status}
+													// label='Age'
+													onChange={
+														handleStatusChange
+													}>
+													<MenuItem value={"all"}>
+														Select Status
+													</MenuItem>
+													<MenuItem value={"true"}>
+														Activated
+													</MenuItem>
+													<MenuItem value={"false"}>
+														Deactivated
+													</MenuItem>
+												</Select>
+											</FormControl>
+										</MDBox>
 										<input
 											className='user-search'
 											type='search'
 											name='search'
 											id='search'
-											placeholder='search users'
+											placeholder='Search users by name/email/phone number'
 											onChange={handleSearch}
 										/>
 									</MDBox>

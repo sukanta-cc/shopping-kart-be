@@ -19,8 +19,12 @@ export default function data(props) {
 		try {
 			let url = "/users";
 
-			if (props.search) {
+			if (props.search && props.status !== "all") {
+				url += `?search=${props.search}&status=${props.status}`;
+			} else if (props.search) {
 				url += `?search=${props.search}`;
+			} else if (props.status !== "all") {
+				url += `?status=${props.status}`;
 			}
 
 			const result = await axios.get(url);
@@ -37,8 +41,9 @@ export default function data(props) {
 	};
 
 	useEffect(() => {
+		console.log(props.status, "<<-- status");
 		getUsers();
-	}, [props.search]);
+	}, [props.search, props.status]);
 
 	const Author = ({ image, name, email }) => (
 		<MDBox display='flex' alignItems='center' lineHeight={1}>
