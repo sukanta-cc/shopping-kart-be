@@ -1,0 +1,15 @@
+.actions {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 4.2rem;
+}
+
+.user-search {
+	height: 2rem;
+	width: 13rem;
+	border-radius: 5px;
+	padding: 10px;
+	border: 1px solid transparent;
+	outline: none;
+}
