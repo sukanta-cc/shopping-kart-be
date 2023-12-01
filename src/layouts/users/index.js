@@ -70,7 +70,7 @@ function Users() {
 	return (
 		<DashboardLayout>
 			<DashboardNavbar />
-			<MDBox pt={6} pb={3}>
+			<MDBox pt={3} pb={3}>
 				<Grid container spacing={6}>
 					<Grid item xs={12}>
 						<Card>
@@ -89,7 +89,7 @@ function Users() {
 										justifyContent: "space-between",
 										alignItems: "center",
 									}}>
-									<MDTypography variant='h6' color='white'>
+									<MDTypography variant='h5' color='white'>
 										Users
 									</MDTypography>
 									<MDBox

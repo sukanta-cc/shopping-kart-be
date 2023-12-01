@@ -19,7 +19,12 @@ root.render(
 		<StrictMode>
 			<MaterialUIControllerProvider>
 				<App />
-				<ToastContainer draggable pauseOnHover theme='dark' />
+				<ToastContainer
+					draggable
+					pauseOnHover
+					theme='dark'
+					newestOnTop
+				/>
 			</MaterialUIControllerProvider>
 		</StrictMode>
 	</BrowserRouter>
