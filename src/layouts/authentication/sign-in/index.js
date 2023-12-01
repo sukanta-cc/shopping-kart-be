@@ -43,6 +43,7 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 // Axios
 import axios from "../../../axios/axios";
+import { toast } from "react-toastify";
 
 function Basic() {
 	const navigate = useNavigate();
@@ -68,6 +69,13 @@ function Basic() {
 			}
 		} catch (error) {
 			console.error(error, "<<-- Error in user login");
+			const { message } = error?.response?.data;
+
+			if (message.msg) {
+				toast.error(message.msg);
+			} else {
+				toast.error(message);
+			}
 		}
 	};
 

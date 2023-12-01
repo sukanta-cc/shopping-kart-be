@@ -12,9 +12,15 @@ import axios from "../../../axios/axios";
 import { toast } from "react-toastify";
 import "../styles/index.css";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 export default function data(props) {
+	const navigate = useNavigate();
 	const [users, setUsers] = useState([]);
+	const [action, setAction] = useState({
+		type: "",
+		id: "",
+	});
 	const getUsers = async () => {
 		try {
 			let url = "/users";
@@ -41,7 +47,6 @@ export default function data(props) {
 	};
 
 	useEffect(() => {
-		console.log(props.status, "<<-- status");
 		getUsers();
 	}, [props.search, props.status]);
 
@@ -60,22 +65,16 @@ export default function data(props) {
 		</MDBox>
 	);
 
-	const Job = ({ title, description }) => (
-		<MDBox lineHeight={1} textAlign='left'>
-			<MDTypography
-				display='block'
-				variant='caption'
-				color='text'
-				fontWeight='medium'>
-				{title}
-			</MDTypography>
-			<MDTypography variant='caption'>{description}</MDTypography>
-		</MDBox>
-	);
-
-	useEffect(() => {
-		console.log(users, "<<-- users");
-	}, [users]);
+	const handleClick = (action, user) => {
+		if (action === "edit") {
+			navigate(`/edit-user?userId=${user._id}`);
+		} else {
+			setAction({
+				type: action,
+				id: user._id,
+			});
+		}
+	};
 
 	const userData = users?.map((user) => {
 		return {
@@ -110,7 +109,8 @@ export default function data(props) {
 						href='#'
 						variant='caption'
 						color='text'
-						fontWeight='medium'>
+						fontWeight='medium'
+						onClick={() => handleClick("edit", user)}>
 						Edit
 					</MDTypography>
 
@@ -120,7 +120,8 @@ export default function data(props) {
 						href='#'
 						variant='caption'
 						color='text'
-						fontWeight='medium'>
+						fontWeight='medium'
+						onClick={() => handleClick("delete", user)}>
 						Delete
 					</MDTypography>
 				</div>
@@ -139,5 +140,8 @@ export default function data(props) {
 		],
 
 		rows: userData,
+		action: action,
+		setAction: setAction,
+		getUsers,
 	};
 }

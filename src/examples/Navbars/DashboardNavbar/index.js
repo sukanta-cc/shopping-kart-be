@@ -14,7 +14,7 @@ import Menu from "@mui/material/Menu";
 import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
-import MDBox from "components/MDBox";
+// import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
 
 // Material Dashboard 2 React example components
@@ -37,6 +37,7 @@ import {
 	setMiniSidenav,
 	setOpenConfigurator,
 } from "context";
+import MDBox from "components/MDBox";
 
 function DashboardNavbar({ absolute, light, isMini }) {
 	const [navbarType, setNavbarType] = useState();
@@ -49,7 +50,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
 		darkMode,
 	} = controller;
 	const [openMenu, setOpenMenu] = useState(false);
-	const route = useLocation().pathname.split("/").slice(1);
 
 	useEffect(() => {
 		// Setting the navbar type
@@ -141,13 +141,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
 				<MDBox
 					color='inherit'
 					mb={{ xs: 1, md: 0 }}
+					style={{ userSelect: "none" }}
 					sx={(theme) => navbarRow(theme, { isMini })}>
-					<Breadcrumbs
-						icon='home'
-						title={route[route.length - 1]}
-						route={route}
-						light={light}
-					/>
+					Shopping Cart
 				</MDBox>
 				{isMini ? null : (
 					<MDBox sx={(theme) => navbarRow(theme, { isMini })}>

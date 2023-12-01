@@ -48,6 +48,9 @@ import SignUp from "layouts/authentication/sign-up";
 // @mui icons
 import Icon from "@mui/material/Icon";
 import Users from "layouts/users";
+import UserEdit from "layouts/users/UserEdit";
+import { ShoppingCart } from "@mui/icons-material";
+import Products from "layouts/products";
 
 const routes = [
 	{
@@ -57,6 +60,14 @@ const routes = [
 		icon: <Icon fontSize='small'>group</Icon>,
 		route: "/users",
 		component: !localStorage.getItem("token") ? <SignIn /> : <Users />,
+	},
+	{
+		type: "collapse",
+		name: "Products",
+		key: "products",
+		icon: <ShoppingCart />,
+		route: "/products",
+		component: !localStorage.getItem("token") ? <SignIn /> : <Products />,
 	},
 	{
 		type: "collapse",
@@ -124,6 +135,13 @@ const mainRoutes = [
 		icon: <Icon fontSize='small'>Login</Icon>,
 		route: "/",
 		component: <SignIn />,
+	},
+	{
+		type: "collapse",
+		name: "Edit User",
+		key: "edituser",
+		route: "/edit-user",
+		component: <UserEdit />,
 	},
 	...routes,
 ];

@@ -57,9 +57,6 @@ import {
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
-
 export default function App() {
 	const [controller, dispatch] = useMaterialUIController();
 	const {
@@ -216,7 +213,6 @@ export default function App() {
 				{getRoutes(mainRoutes)}
 				<Route path='*' element={<Navigate to='/' />} />
 			</Routes>
-			<ToastContainer />
 		</ThemeProvider>
 	);
 }

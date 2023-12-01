@@ -25,3 +25,13 @@
 	outline: none;
 	background-color: white !important;
 }
+
+.user-filter-for-edit {
+	height: 2.8rem;
+	width: 100%;
+	border-radius: 5px;
+	padding: 10px 5px;
+	border: 1px solid transparent;
+	outline: none;
+	background-color: white !important;
+}

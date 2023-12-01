@@ -7,19 +7,37 @@ import { toast } from "react-toastify";
 import userTableData from "./data/usersTableData";
 import DataTable from "examples/Tables/DataTable";
 import {
+	Box,
 	Card,
 	FormControl,
 	Grid,
 	InputLabel,
 	MenuItem,
+	Modal,
 	Select,
+	Typography,
 } from "@mui/material";
 import MDTypography from "components/MDTypography";
 import "./styles/index.css";
+import DeleteConfirmationModal from "components/DeleteModal/DeleteModal";
+
 function Users() {
 	const [status, setStatus] = useState("all");
 	const [search, setSearch] = useState("");
-	const { columns, rows } = userTableData({ search, status });
+	const [open, setOpen] = useState(false);
+	const [userId, setUserId] = useState("");
+
+	const { columns, rows, action, setAction, getUsers } = userTableData({
+		search,
+		status,
+	});
+
+	useEffect(() => {
+		if (action.type === "delete") {
+			setOpen(true);
+			setUserId(action.id);
+		}
+	}, [action]);
 
 	const handleSearch = async (e) => {
 		setSearch(e.target.value);
@@ -27,6 +45,26 @@ function Users() {
 
 	const handleStatusChange = (e) => {
 		setStatus(e.target.value);
+	};
+
+	const handleUserDelete = async () => {
+		try {
+			let url = `/users/${userId}`;
+
+			const result = await axios.delete(url);
+
+			if (result.data.success) {
+				toast.success(result.data.message);
+				setOpen(false);
+				setUserId("");
+				getUsers();
+			} else {
+				toast.error(result.data.message);
+			}
+		} catch (error) {
+			console.error(error, "<<-- error in user delete");
+			toast.error(error?.response?.data.message);
+		}
 	};
 
 	return (
@@ -52,7 +90,7 @@ function Users() {
 										alignItems: "center",
 									}}>
 									<MDTypography variant='h6' color='white'>
-										Users' Table
+										Users
 									</MDTypography>
 									<MDBox
 										pr={1}
@@ -106,13 +144,21 @@ function Users() {
 									isSorted={false}
 									entriesPerPage={false}
 									showTotalEntries={false}
-									noEndBorder
+									noEndBorder={false}
 								/>
 							</MDBox>
 						</Card>
 					</Grid>
 				</Grid>
 			</MDBox>
+			<DeleteConfirmationModal
+				open={open}
+				handleClose={() => {
+					setOpen(false);
+					setAction("");
+				}}
+				handleDelete={handleUserDelete}
+			/>
 		</DashboardLayout>
 	);
 }

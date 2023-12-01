@@ -107,6 +107,31 @@ function Cover() {
 						</MDBox>
 						<MDBox mb={2}>
 							<MDInput
+								type='number'
+								label='Phone Number'
+								name='phone'
+								variant='standard'
+								fullWidth
+								onChange={handleChange}
+							/>
+						</MDBox>
+						<MDBox mb={2}>
+							<MDInput
+								id='address'
+								name='address'
+								label='Address'
+								variant='standard'
+								onChange={handleChange}
+								value={formData.address}
+								style={{
+									width: "100%",
+								}}
+								multiline
+								rows={2}
+							/>
+						</MDBox>
+						<MDBox mb={2}>
+							<MDInput
 								type='password'
 								label='Password'
 								name='password'
