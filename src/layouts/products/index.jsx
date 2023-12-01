@@ -4,6 +4,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import React from "react";
 
 function Products() {
+	console.log("Products");
 	return (
 		<DashboardLayout>
 			<DashboardNavbar />
