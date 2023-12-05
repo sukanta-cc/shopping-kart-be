@@ -27,10 +27,9 @@ const verifyToken = (req, res, next) => {
                         isDeleted: false,
                     });
 
-                    console.log(user, "<<-- user");
-
                     if (user._id) {
                         req.user = user;
+                        next();
                     } else {
                         return res.status(404).json({
                             success: false,
@@ -38,8 +37,6 @@ const verifyToken = (req, res, next) => {
                         });
                     }
                 }
-
-                next();
             } catch (error) {
                 console.error(error, "<<-- Error in verifying token");
                 return res.status(400).send({
