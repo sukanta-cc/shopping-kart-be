@@ -5,6 +5,7 @@ const router = require("./src/routes");
 const cors = require("cors");
 const config = require("./src/config");
 const createAdminUser = require("./src/utils/genarateAdmin");
+const sendMail = require("./src/mail-config");
 
 const app = express();
 
@@ -17,11 +18,11 @@ createAdminUser();
 app.use("/api", router);
 
 app.get("/", (req, res) => {
-	res.json("Hello world");
+    res.json("Hello world");
 });
 
 app.listen(config.port, () => {
-	console.log(`
+    console.log(`
     ------------------------------------------------
     ⚡️ Server is running on http://localhost:${config.port} ⚡️
     ------------------------------------------------`);
