@@ -57,17 +57,17 @@ const productSchema = new Schema(
 );
 
 productSchema.pre("save", async function (next) {
-	await this.populate("discount", ["_id", "name", "discount"]);
+	await this.populate("discount", ["_id", "name", "discount", "type"]);
 	next();
 });
 
 productSchema.pre("find", function (next) {
-	this.populate("discount", ["_id", "name", "discount"]);
+	this.populate("discount", ["_id", "name", "discount", "type"]);
 	next();
 });
 
 productSchema.pre("findOne", function (next) {
-	this.populate("discount", ["_id", "name", "discount"]);
+	this.populate("discount", ["_id", "name", "discount", "type"]);
 	next();
 });
 

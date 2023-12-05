@@ -5,10 +5,13 @@ const services = require("./services");
 const upload = require("../utils/upload");
 const { check } = require("express-validator");
 const {
-	cartValidationRule,
-	orderValidationRule,
-	orderStatusValidationRule,
+    cartValidationRule,
+    orderValidationRule,
+    orderStatusValidationRule,
+    productAddValidationRule,
+    productUpdateValidationRule,
 } = require("./validation");
+const errorValidate = require("../middlewares/errorValidate");
 
 const router = express.Router();
 
@@ -19,10 +22,10 @@ router.use(verifyToken);
  * @description - Getting a list of products with filters and search parameters
  */
 router.get("/", (req, res) => {
-	services
-		.getProducts(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .getProducts(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 /**
@@ -30,10 +33,10 @@ router.get("/", (req, res) => {
  * @description - Getting a product details
  */
 router.get("/:productId", (req, res) => {
-	services
-		.getProductDetails(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .getProductDetails(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 /**
@@ -41,10 +44,10 @@ router.get("/:productId", (req, res) => {
  * @description - Getting featured products
  */
 router.get("/featured", (req, res) => {
-	services
-		.getFeaturedProducts()
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .getFeaturedProducts()
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Starting of cart routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -53,11 +56,11 @@ router.get("/featured", (req, res) => {
  * @route - POST /api/products/carts
  * @description - This route will be use for adding products to cart
  */
-router.post("/carts", cartValidationRule, (req, res) => {
-	services
-		.addToCart(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+router.post("/carts", cartValidationRule, errorValidate, (req, res) => {
+    services
+        .addToCart(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 /**
@@ -65,10 +68,10 @@ router.post("/carts", cartValidationRule, (req, res) => {
  * @description - This route will be use for getting cart values
  */
 router.get("/carts", (req, res) => {
-	services
-		.getCarts(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .getCarts(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Ending of cart routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -79,11 +82,11 @@ router.get("/carts", (req, res) => {
  * @route - GET /api/products/orders
  * @description - This route will create a new order
  */
-router.post("/orders", orderValidationRule, (req, res) => {
-	services
-		.createOrder(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+router.post("/orders", orderValidationRule, errorValidate, (req, res) => {
+    services
+        .createOrder(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 /**
@@ -91,22 +94,27 @@ router.post("/orders", orderValidationRule, (req, res) => {
  * @description - This route will use to update order status
  * @param {string} - orderId
  */
-router.patch("/orders/:orderId", orderStatusValidationRule, (req, res) => {
-	services
-		.orderStatusUpdate(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
-});
+router.patch(
+    "/orders/:orderId",
+    orderStatusValidationRule,
+    errorValidate,
+    (req, res) => {
+        services
+            .orderStatusUpdate(req)
+            .then((result) => res.status(200).json(result))
+            .catch((err) => res.status(err.status ?? 500).json(err));
+    }
+);
 
 /**
  * @route - GET /api/products/orders
  * @description - This route will be used to get user orders
  */
 router.get("/orders", (req, res) => {
-	services
-		.getOrders(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .getOrders(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Starting of order routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,24 +128,35 @@ router.use(adminRouter);
  * @description - This route will be use to add product
  * @body - name, description, productCode, featured
  */
-router.post("/", upload.array("images", 8), (req, res) => {
-	services
-		.addProduct(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
-});
+router.post(
+    "/",
+    productAddValidationRule,
+    errorValidate,
+    upload.array("images", 8),
+    (req, res) => {
+        services
+            .addProduct(req)
+            .then((result) => res.status(200).json(result))
+            .catch((err) => res.status(err.status ?? 500).json(err));
+    }
+);
 
 /**
  * @route - PUT /api/products/:productId
  * @description - This route will be use to update product
  * @body - name, description, productCode, featured
  */
-router.put("/:productId", (req, res) => {
-	services
-		.updateProduct(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
-});
+router.put(
+    "/:productId",
+    productUpdateValidationRule,
+    errorValidate,
+    (req, res) => {
+        services
+            .updateProduct(req)
+            .then((result) => res.status(200).json(result))
+            .catch((err) => res.status(err.status ?? 500).json(err));
+    }
+);
 
 /**
  * @route - PATCH /api/products/:productId
@@ -145,10 +164,21 @@ router.put("/:productId", (req, res) => {
  * @params - productId
  */
 router.patch("/:productId", (req, res) => {
-	services
-		.changeProductStatus(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .changeProductStatus(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+/**
+ * @route - PATCH /api/products/feature-product/:productId
+ * @description - This route will be use for making featured product
+ */
+router.patch("/feature-product/:productId", (req, res) => {
+    services
+        .setFeaturedProductStatus(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 /**
@@ -157,10 +187,10 @@ router.patch("/:productId", (req, res) => {
  * @body - productIds
  */
 router.delete("/", (req, res) => {
-	services
-		.deleteProducts(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .deleteProducts(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 /**
@@ -168,32 +198,32 @@ router.delete("/", (req, res) => {
  * @description - This route will be used to get all orders
  */
 router.get("/orders", (req, res) => {
-	services
-		.getAllOrders(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .getAllOrders(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 /**
  * @route - GET /api/products/orders/:orderId
  * @description - This route will return order details
  */
-router.get("/orders/:orderId", (req, res)=>{
-	services
+router.get("/orders/:orderId", (req, res) => {
+    services
         .getOrderDetails(req)
         .then((result) => res.status(200).json(result))
-        .catch((err) => res.status(err.status?? 500).json(err));
-})
+        .catch((err) => res.status(err.status ?? 500).json(err));
+});
 
 /**
  * @route - PUT /api/products/cancel-order
  * @description - this route will be use to cancel order
  */
 router.put("/cancel-order", (req, res) => {
-	services
-		.cancelOrder(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .cancelOrder(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Ending of admin routes~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

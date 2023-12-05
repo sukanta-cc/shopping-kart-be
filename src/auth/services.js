@@ -8,7 +8,7 @@ module.exports = {
 	signup: (req) => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const { name, email, password } = req.body;
+				const { name, email, phone, password } = req.body;
 				// Check user is already in the system or not
 				const user = await userModel.findOne({
 					email,
@@ -24,6 +24,7 @@ module.exports = {
 					const newUser = new userModel({
 						name,
 						email,
+						phone,
 						password: hashPass,
 					});
 

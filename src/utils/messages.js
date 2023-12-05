@@ -18,6 +18,8 @@ module.exports = {
 		NO_USERS_FOUND: "No users found.",
 		PASSWORD_RESET: "Password reset successful.",
 		USER_ACTIVATION: "User {{status}} successfully.",
+		USER_UPDATED_SUCCESS: "User Updated successfully",
+		USER_DELETED_SUCCESS: "User deleted successfully",
 	},
 
 	products: {
@@ -36,6 +38,10 @@ module.exports = {
 		ORDERS_FETCHED_SUCCESS: "Orders fetched successfully.",
 		ORDER_CANCELED_SUCCESS: "Order canceled successfully.",
 		ORDER_DETAILS_FETCHED_SUCCESS: "Order details fetched successfully.",
+		PRODUCT_STATUS_UPDATED_SUCCESS: "Product {{status}} successfully.",
+		PRODUCT_FEATURED_SUCCESS: "The product has been featured successfully.",
+		PRODUCT_UNFEATURED_SUCCESS:
+			"The product has been removed from featured.",
 	},
 
 	discount: {

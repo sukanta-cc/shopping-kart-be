@@ -7,7 +7,7 @@ const adminRouter = async (req, res, next) => {
 		if (role !== "admin") {
 			return res.status(401).send({
 				success: false,
-				message: messages.common.UNAUTHORIZE,
+				message: messages.common.UNAUTHORIZED,
 			});
 		} else {
 			next();

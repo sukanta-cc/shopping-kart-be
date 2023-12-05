@@ -33,11 +33,22 @@ router.get("/:userId", (req, res) => {
  * @route - "/api/users/:userId"
  * @description - This api is for update user status
  */
-router.patch("/:userId", (req, res) => {
+router.put("/:userId", (req, res) => {
 	services
-		.updateUserStatus(req)
+		.updateUser(req)
 		.then((result) => res.status(200).send(result))
 		.catch((err) => res.status(500).send(err));
+});
+
+/**
+ * @route - DELETE /api/users/:userId
+ * @description - API to delete user
+ */
+router.delete("/:userId", (req, res) => {
+    services
+        .deleteUser(req)
+        .then((result) => res.status(200).send(result))
+        .catch((err) => res.status(500).send(err));
 });
 
 module.exports = router;
