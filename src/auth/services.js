@@ -180,8 +180,10 @@ module.exports = {
                         { expiresIn: "7d" }
                     );
 
-                    user.otp = "";
-                    await user.save();
+                    await userModel.updateOne(
+                        { _id: user._id },
+                        { $set: { otp: "" } }
+                    );
 
                     return resolve({
                         success: true,

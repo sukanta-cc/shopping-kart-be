@@ -35,7 +35,7 @@ router.post("/login", loginValidation, errorValidate, (req, res) => {
  * @description - This api is for verifying the token
  * @params {string} token
  */
-router.patch("/verify/:token", verifyToken, (req, res) => {
+router.patch("/verify/:otp", (req, res) => {
     services
         .verifyTokenAndLogin(req)
         .then((result) => res.status(200).json(result))
