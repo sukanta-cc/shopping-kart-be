@@ -59,7 +59,7 @@ const productAddValidationRule = [
         .isEmpty()
         .withMessage("ProductCode can't be empty"),
     check("featured").not().isEmpty().withMessage("Featured can't be empty"),
-    check("price").not().isEmpty().withMessage("Price can't be empty"),
+    check("amount").not().isEmpty().withMessage("Price can't be empty"),
 ];
 
 const productUpdateValidationRule = [
@@ -82,5 +82,5 @@ module.exports = {
     orderValidationRule,
     orderStatusValidationRule,
     productAddValidationRule,
-	productUpdateValidationRule
+    productUpdateValidationRule,
 };

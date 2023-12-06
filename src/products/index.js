@@ -128,35 +128,24 @@ router.use(adminRouter);
  * @description - This route will be use to add product
  * @body - name, description, productCode, featured
  */
-router.post(
-    "/",
-    productAddValidationRule,
-    errorValidate,
-    upload.array("images", 8),
-    (req, res) => {
-        services
-            .addProduct(req)
-            .then((result) => res.status(200).json(result))
-            .catch((err) => res.status(err.status ?? 500).json(err));
-    }
-);
+router.post("/", upload.array("images", 8), (req, res) => {
+    services
+        .addProduct(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
+});
 
 /**
- * @route - PUT /api/products/:productId
+ * @route - POST /api/products/:productId
  * @description - This route will be use to update product
  * @body - name, description, productCode, featured
  */
-router.put(
-    "/:productId",
-    productUpdateValidationRule,
-    errorValidate,
-    (req, res) => {
-        services
-            .updateProduct(req)
-            .then((result) => res.status(200).json(result))
-            .catch((err) => res.status(err.status ?? 500).json(err));
-    }
-);
+router.post("/:productId", upload.array("images", 8), (req, res) => {
+    services
+        .updateProduct(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
+});
 
 /**
  * @route - PATCH /api/products/:productId
@@ -182,11 +171,10 @@ router.patch("/feature-product/:productId", (req, res) => {
 });
 
 /**
- * @route - DELETE /api/products
+ * @route - DELETE /api/products/:productId
  * @description - This route will delete multiple products
- * @body - productIds
  */
-router.delete("/", (req, res) => {
+router.delete("/:productId", (req, res) => {
     services
         .deleteProducts(req)
         .then((result) => res.status(200).json(result))

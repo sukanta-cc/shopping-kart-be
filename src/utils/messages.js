@@ -32,6 +32,7 @@ module.exports = {
         PRODUCT_UPDATED_SUCCESS: "Product updated successfully.",
         PRODUCTS_FETCHED_SUCCESS: "Products retrieved successfully.",
         PRODUCT_FOUND_SUCCESSFUL: "Product retrieved successfully.",
+        PRODUCT_NOT_FOUND: "Product not found.",
         FEATURED_PRODUCTS_FETCHED_SUCCESS:
             "Featured products retrieved successfully.",
         PRODUCTS_DELETED_SUCCESS: "Products deleted successfully.",
