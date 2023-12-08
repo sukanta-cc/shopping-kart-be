@@ -105,7 +105,7 @@ module.exports = {
                         status: true,
                         isDeleted: false,
                     })
-                    .populate("product", ["name", "_id"])
+                    .populate("product", ["name", "_id", "productCode"])
                     .sort({ createdAt: -1 });
 
                 return resolve({
