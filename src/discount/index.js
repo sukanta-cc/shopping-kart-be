@@ -14,10 +14,10 @@ router.use(adminRouter);
  */
 
 router.post("/", (req, res) => {
-	services
-		.addDiscount(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .addDiscount(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 /**
@@ -25,21 +25,32 @@ router.post("/", (req, res) => {
  * @description - Get all discount coupon
  */
 router.get("/", (req, res) => {
-	services
-		.getDiscounts(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .getDiscounts(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 /**
  * @route - PUT /api/discounts/:discountId
  * @description - Update a discount coupon
  */
-router.put("/:discountId", (req, res) => {
-	services
-		.updateDiscount(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+router.post("/:discountId", (req, res) => {
+    services
+        .updateDiscount(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
+});
+
+/**
+ * @route - PATCH /api/discounts/:discountId
+ * @description - Changing discount status
+ */
+router.patch("/:discountId", (req, res) => {
+    services
+        .updateDiscountStatus(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 /**
@@ -47,10 +58,10 @@ router.put("/:discountId", (req, res) => {
  * @description - Delete a discount coupon
  */
 router.delete("/:discountId", (req, res) => {
-	services
-		.deleteDiscount(req)
-		.then((result) => res.status(200).json(result))
-		.catch((err) => res.status(err.status ?? 500).json(err));
+    services
+        .deleteDiscount(req)
+        .then((result) => res.status(200).json(result))
+        .catch((err) => res.status(err.status ?? 500).json(err));
 });
 
 module.exports = router;

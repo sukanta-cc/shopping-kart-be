@@ -8,28 +8,31 @@ module.exports = {
             try {
                 const { name, description, discount, product, type } = req.body;
 
-                const globalDiscount = await discountModel
-                    .findOne({
-                        global: true,
-                        status: true,
-                        isDeleted: false,
-                    })
-                    .sort({ createdAt: -1 });
-
-                const productDiscount = await discountModel.findOne({
-                    product: product,
+                const globalDiscountQuery = {
+                    global: true,
                     status: true,
                     isDeleted: false,
-                });
+                };
+                const productDiscountQuery = {
+                    product,
+                    status: true,
+                    isDeleted: false,
+                };
 
-                // If productId is not exists then it will be global discount otherwise it will be product specific discount
+                const globalDiscount = await discountModel
+                    .findOne(globalDiscountQuery)
+                    .sort({ createdAt: -1 });
+                const productDiscount = await discountModel.findOne(
+                    productDiscountQuery
+                );
+
                 const newDiscount = new discountModel({
                     name,
                     description,
                     discount,
                     type,
-                    global: !product ? true : false,
-                    product,
+                    global: !product,
+                    product: !product ? null : product,
                 });
 
                 const savedDiscount = await newDiscount.save();
@@ -40,52 +43,36 @@ module.exports = {
                         success: false,
                         message: messages.discount.DISCOUNT_CREATED_FAILED,
                     });
-                } else {
-                    // Adding this discount id to the product table
-                    if (savedDiscount.product) {
-                        let query = {
-                            isDeleted: false,
-                            _id: savedDiscount.product,
-                        };
-
-                        if (productDiscount?._id) {
-                            query.discount = productDiscount._id;
-
-                            // Changing status of the old global discount
-                            productDiscount.status = false;
-
-                            await productDiscount.save();
-                        }
-
-                        await productModel.updateOne(query, {
-                            discount: savedDiscount._id,
-                        });
-                    } else {
-                        let query = {
-                            isDeleted: false,
-                        };
-
-                        if (globalDiscount?._id) {
-                            query.discount = globalDiscount._id;
-
-                            // Changing status of the old global discount
-                            globalDiscount.status = false;
-
-                            await globalDiscount.save();
-                        }
-
-                        await productModel.updateMany(query, {
-                            discount: savedDiscount._id,
-                        });
-                    }
-
-                    return resolve({
-                        status: 200,
-                        success: true,
-                        message: messages.discount.DISCOUNT_CREATED_SUCCESS,
-                        result: savedDiscount,
-                    });
                 }
+
+                // Update product table with the new discount
+                const updateProductQuery = { isDeleted: false };
+
+                if (product) {
+                    updateProductQuery._id = savedDiscount.product;
+                    productDiscountQuery.discount = savedDiscount._id;
+
+                    // Changing status of the old product discount
+                    productDiscount.status = false;
+                    await productDiscount.save();
+                } else {
+                    globalDiscountQuery.discount = savedDiscount._id;
+
+                    // Changing status of the old global discount
+                    globalDiscount.status = false;
+                    await globalDiscount.save();
+                }
+
+                await productModel.updateMany(updateProductQuery, {
+                    discount: savedDiscount._id,
+                });
+
+                return resolve({
+                    status: 200,
+                    success: true,
+                    message: messages.discount.DISCOUNT_CREATED_SUCCESS,
+                    result: savedDiscount,
+                });
             } catch (error) {
                 console.error(error, "<<-- Error in addDiscount");
                 return reject({

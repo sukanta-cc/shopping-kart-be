@@ -8,8 +8,6 @@ const {
     cartValidationRule,
     orderValidationRule,
     orderStatusValidationRule,
-    productAddValidationRule,
-    productUpdateValidationRule,
 } = require("./validation");
 const errorValidate = require("../middlewares/errorValidate");
 
