@@ -68,6 +68,7 @@ module.exports = {
         COUPONS_FETCHED_SUCCESS: "Coupons fetched successfully.",
         COUPON_NOT_FOUND: "Coupon not found.",
         COUPON_FOUND: "Coupon retrieved successfully.",
+        COUPON_UPDATED: "Coupon updated successfully.",
     },
 
     store: {
