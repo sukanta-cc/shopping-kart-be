@@ -56,8 +56,12 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             try {
                 const { imageUrl } = req.query;
-                const img = fs.readFileSync(imageUrl);
-                if (!img) {
+                let img;
+                try {
+                    img = fs.readFileSync(imageUrl);
+                    res.end(img, "binary");
+                } catch (error) {
+                    console.error(error, "<<-- Error in getting file");
                     return reject({
                         status: 400,
                         success: false,
@@ -65,7 +69,6 @@ module.exports = {
                         err: error.message ?? error.toString(),
                     });
                 }
-                res.end(img, "binary");
             } catch (error) {
                 console.error(error, "<<-- Error in adding store details");
                 return reject({

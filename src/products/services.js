@@ -56,10 +56,17 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             try {
                 const { productId } = req.params;
-                const { name, description, productCode, featured } = req.body;
+                const { name, description, productCode, featured, imageUrls } =
+                    req.body;
+
+                const images = await Promise.all(
+                    req.files.map((item) => item.path)
+                );
+
                 const product = await productsModel.findByIdAndUpdate(
                     productId,
                     {
+                        images: [...imageUrls.split(","), ...images],
                         name,
                         description,
                         productCode,
