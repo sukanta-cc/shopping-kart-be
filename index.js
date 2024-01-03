@@ -6,23 +6,27 @@ const cors = require("cors");
 const config = require("./src/config");
 const createAdminUser = require("./src/utils/genarateAdmin");
 const morgan = require("morgan");
+const errorHandler = require("./src/middlewares/errorHandler");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 app.use(morgan("tiny"));
+
+app.use(errorHandler)
+
 connectToDb();
 createAdminUser();
 
 app.use("/api", router);
 
 app.get("/", (req, res) => {
-    res.json("Hello world");
+  res.json("Hello world");
 });
 
 app.listen(config.port, () => {
-    console.log(`
+  console.log(`
     ------------------------------------------------
     ⚡️ Server is running on http://localhost:${config.port} ⚡️
     ------------------------------------------------`);

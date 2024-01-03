@@ -109,38 +109,11 @@ module.exports = {
                             { expiresIn: "7d" }
                         );
 
-                        if (user.isTwoFAEnabled) {
-                            const otp = generateOTP();
-                            user.otp = otp;
-
-                            await user.save();
-
-                            sendMail({
-                                to: user.email,
-                                subject: "Two-Factor Authentication",
-                                message: `Hello <strong style="color: #3F00FF">${user.name}</strong>, you have requested to enable two-factor authentication. Use this below otp to Login <br />
-                                <p style="
-                                font-size: 24px;
-                                font-weight: bold;
-                                background: #8b79ff;
-                                width: fit-content;
-                                padding: 5px 10px;
-                                border-radius: 8px;
-                                color: white;" id="otpDisplay">${otp}</p>
-                                `,
-                            });
-
-                            return resolve({
-                                success: true,
-                                message: messages.auth.VERIFY_OTP,
-                            });
-                        } else {
-                            return resolve({
-                                success: true,
-                                message: messages.auth.USER_LOGGEDIN_SUCCESS,
-                                access_token: token,
-                            });
-                        }
+                        return resolve({
+                            success: true,
+                            message: messages.auth.USER_LOGGEDIN_SUCCESS,
+                            access_token: token,
+                        });
                     } else {
                         return reject({
                             status: 400,

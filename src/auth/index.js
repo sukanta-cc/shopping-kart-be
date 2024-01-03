@@ -26,7 +26,10 @@ router.post("/signup", signUpValidation, errorValidate, (req, res) => {
 router.post("/login", loginValidation, errorValidate, (req, res) => {
     services
         .signin(req)
-        .then((result) => res.status(200).send(result))
+        .then((result) => {
+            console.log(result, "<<-- result");
+            res.status(200).send(result);
+        })
         .catch((err) => res.status(err.status ?? 500).send(err));
 });
 

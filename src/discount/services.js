@@ -116,7 +116,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             try {
                 const { discountId } = req.params;
-                const { name, description, discount, product } = req.body;
+                const { name, description, discount, product, type } = req.body;
 
                 const updatedDiscount = await discountModel.findByIdAndUpdate(
                     discountId,
@@ -125,6 +125,7 @@ module.exports = {
                         description,
                         discount,
                         product,
+                        type,
                     },
                     { new: true }
                 );
